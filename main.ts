@@ -90,3 +90,17 @@ server.post("/todos", (req: Request, res: Response) => {
   monTableau.push(newTodo);
   res.status(201).send(newTodo);
 });
+
+import { Router, Request, Response } from 'express';
+import { query } from './db';
+const router = Router();
+// Route pour récupérer tous les utilisateurs
+router.get('/users', async (req: Request, res: Response) => {
+  try {
+    // récupérer tous les utilisateurs du SGBD
+    const users = await query('SELECT * FROM users');
+    res.json(users);
+  } catch (error) {
+    console.error('Erreur :', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }});
