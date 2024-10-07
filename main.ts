@@ -1,12 +1,11 @@
-import express, { Request, Response } from "express";
+import express, { Express, Request, Response, Router } from "express";
 import cors from "cors";
-import { query } from './db'; // Assurez-vous que ce fichier existe et est configuré correctement
+import { query } from "./db";
 
 const server = express();
 server.use(cors());
-server.use(express.json()); // Middleware pour parser le body JSON
+server.use(express.json());
 
-// Interface Todo
 interface Todo {
   id: number;
   label: string;
@@ -15,10 +14,10 @@ interface Todo {
 }
 
 const monTableau: Todo[] = [
-  { id:1, label: "Apprendre Vue.js", done: false,},
-  { id:2, label: "Faire le projet entreprise", done: false, },
-  { id:3, label: "Faire le projet de DEV", done: false,  },
-  { id:4, label: "Obtenir le BTS", done: false,},
+  { id: 1, label: "Apprendre Vue.js", done: false },
+  { id: 2, label: "Faire le projet entreprise", done: false },
+  { id: 3, label: "Faire le projet de DEV", done: false },
+  { id: 4, label: "Obtenir le BTS", done: false },
 ];
 
 server.get("/todos", (req: Request, res: Response) => res.send(monTableau));
@@ -77,14 +76,14 @@ server.post("/todos", (req: Request, res: Response) => {
 });
 
 // Route pour récupérer tous les utilisateurs
-server.get('/users', async (req: Request, res: Response) => {
+server.get("/users", async (req: Request, res: Response) => {
   try {
     // récupérer tous les utilisateurs du SGBD
-    const users = await query('SELECT * FROM users');
+    const users = await query("SELECT * FROM users");
     res.json(users);
   } catch (error) {
-    console.error('Erreur :', error);
-    res.status(500).json({ error: 'Erreur serveur' });
+    console.error("Erreur :", error);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
 
