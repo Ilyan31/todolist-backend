@@ -5,10 +5,10 @@ server.use(cors());
 server.use(express());
 
 const monTableau: Todo[] = [
-  { id:1, label: "Apprendre Vue.js", done: false, priority: "Élevée" },
-  { id:2, label: "Faire le projet entreprise", done: false, priority: "Moyenne" },
-  { id:3, label: "Faire le projet de DEV", done: false, priority: "Faible" },
-  { id:4, label: "Obtenir le BTS", done: false, priority: "Faible" },
+  { id:1, label: "Apprendre Vue.js", done: false,},
+  { id:2, label: "Faire le projet entreprise", done: false, },
+  { id:3, label: "Faire le projet de DEV", done: false,  },
+  { id:4, label: "Obtenir le BTS", done: false,},
 ];
 
 server.get("/todos", (req: Request, res: Response) => res.send("todos"));
