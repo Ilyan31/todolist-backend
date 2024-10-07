@@ -1,20 +1,12 @@
-import express, { Express, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
+import { query } from './db'; // Assurez-vous que ce fichier existe et est configuré correctement
+
 const server = express();
 server.use(cors());
-server.use(express());
+server.use(express.json()); // Middleware pour parser le body JSON
 
-const monTableau: Todo[] = [
-  { id:1, label: "Apprendre Vue.js", done: false,},
-  { id:2, label: "Faire le projet entreprise", done: false, },
-  { id:3, label: "Faire le projet de DEV", done: false,  },
-  { id:4, label: "Obtenir le BTS", done: false,},
-];
-
-server.get("/todos", (req: Request, res: Response) => res.send("todos"));
-
-server.listen(3000, () => console.log("Serveur prêt à démarer"));
-
+// Interface Todo
 interface Todo {
   id: number;
   label: string;
@@ -23,20 +15,13 @@ interface Todo {
 }
 
 const monTableau: Todo[] = [
-  {
-    id: 1,
-    label: "apprendre Vue Js",
-    done: false,
-    dueDate: new Date("2024-12-31"),
-  },
-  { id: 2, label: "apprendre à faire des boucles", done: false },
-  {
-    id: 3,
-    label: "apprendre à griller des saucisses",
-    done: true,
-    dueDate: new Date("2024-12-31"),
-  },
+  { id:1, label: "Apprendre Vue.js", done: false,},
+  { id:2, label: "Faire le projet entreprise", done: false, },
+  { id:3, label: "Faire le projet de DEV", done: false,  },
+  { id:4, label: "Obtenir le BTS", done: false,},
 ];
+
+server.get("/todos", (req: Request, res: Response) => res.send(monTableau));
 
 server.get("/todos/:id", (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10);
@@ -91,11 +76,8 @@ server.post("/todos", (req: Request, res: Response) => {
   res.status(201).send(newTodo);
 });
 
-import { Router, Request, Response } from 'express';
-import { query } from './db';
-const router = Router();
 // Route pour récupérer tous les utilisateurs
-router.get('/users', async (req: Request, res: Response) => {
+server.get('/users', async (req: Request, res: Response) => {
   try {
     // récupérer tous les utilisateurs du SGBD
     const users = await query('SELECT * FROM users');
@@ -103,4 +85,7 @@ router.get('/users', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Erreur :', error);
     res.status(500).json({ error: 'Erreur serveur' });
-  }});
+  }
+});
+
+server.listen(3000, () => console.log("Serveur prêt à démarer"));
