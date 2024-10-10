@@ -1,24 +1,14 @@
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+import mysql from 'mysql2';
 
-// Charger les variables d'environnement depuis le fichier .env
-dotenv.config();
-
-// Connexion au pool MySQL
+// Configurer la connexion via le socket UNIX
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  socketPath: '/var/run/mysqld/mysqld.sock', // Chemin correct du socket MySQL
+  user: 'root',                             // Utilisateur MySQL
+  password: 'mot-de-passe',                 // Mot de passe MySQL
+  database: 'Projet ToDoList',              // Nom de la base de données
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-// Fonction pour exécuter une requête SQL
-export const query = async (sql: string, values?: any) => {
-  try {
-    const [rows] = await pool.query(sql, values);
-    return rows;
-  } catch (error) {
-    console.error('Erreur lors de l\'exécution de la requête SQL :', error);
-    throw error;
-  }
-};
+export const db = pool.promise();
